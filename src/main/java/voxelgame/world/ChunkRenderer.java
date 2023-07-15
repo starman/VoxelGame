@@ -130,9 +130,9 @@ public class ChunkRenderer {
 
         int vertexOffset = 0; // Track the offset for each face - needed for indices
 
-        for (int x = 0; x < chunk.getSize(); x++) {
-            for (int y = 0; y < chunk.getSize(); y++) {
-                for (int z = 0; z < chunk.getSize(); z++) {
+        for (int x = 0; x < chunk.getSizeX(); x++) {
+            for (int y = 0; y < chunk.getSizeY(); y++) {
+                for (int z = 0; z < chunk.getSizeZ(); z++) {
                     Block block = chunk.getBlock(x, y, z);
                     if (block.getType() != BlockType.AIR) {
                         float xPos = (float) x;

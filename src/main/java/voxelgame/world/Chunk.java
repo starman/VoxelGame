@@ -2,11 +2,15 @@ package voxelgame.world;
 
 public class Chunk {
     private Block[][][] blocks;
-    private int size;
+    private int sizeX;
+    private int sizeY;
+    private int sizeZ;
 
-    public Chunk(int size) {
-        this.size = size;
-        blocks = new Block[size][size][size];
+    public Chunk(int sizeX, int sizeY, int sizeZ) {
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.sizeZ = sizeZ;
+        blocks = new Block[sizeX][sizeY][sizeZ];
         generateBlocks();
     }
 
@@ -25,7 +29,15 @@ public class Chunk {
         return blocks[x][y][z];
     }
 
-    public int getSize() {
-        return this.size;
+    public int getSizeX() {
+        return this.sizeX;
+    }
+
+    public int getSizeY() {
+        return this.sizeY;
+    }
+
+    public int getSizeZ() {
+        return this.sizeZ;
     }
 }

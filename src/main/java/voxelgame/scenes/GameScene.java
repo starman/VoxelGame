@@ -24,7 +24,7 @@ public class GameScene extends Scene {
         this.camera = new Camera(Window.get().getWidth(), Window.get().getHeight());
 
         chunkRenderer = new ChunkRenderer();
-        chunk = new Chunk(16);
+        chunk = new Chunk(16, 3, 16);
     }
 
     @Override
