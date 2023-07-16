@@ -135,6 +135,13 @@ public class ChunkRenderer {
                 for (int z = 0; z < chunk.getSizeZ(); z++) {
                     Block block = chunk.getBlock(x, y, z);
                     if (block.getType() != BlockType.AIR) {
+                        boolean isVisibleFront = shouldRenderFace(chunk, x, y, z + 1);
+                        boolean isVisibleBack = shouldRenderFace(chunk, x, y, z - 1);
+                        boolean isVisibleRight = shouldRenderFace(chunk, x + 1, y, z);
+                        boolean isVisibleLeft = shouldRenderFace(chunk, x - 1, y, z);
+                        boolean isVisibleTop = shouldRenderFace(chunk, x, y + 1, z);
+                        boolean isVisibleBottom = shouldRenderFace(chunk, x, y - 1, z);
+
                         float xPos = (float) x;
                         float yPos = (float) y;
                         float zPos = (float) z;
@@ -146,122 +153,134 @@ public class ChunkRenderer {
                         int texCoordIndex = 0;
 
                         // Generate vertices for the front face
-                        for (int i = 0; i < CUBE_POS_FRONT.length; i += 3) {
-                            vertices.add(CUBE_POS_FRONT[i] + xPos);
-                            vertices.add(CUBE_POS_FRONT[i + 1] + yPos);
-                            vertices.add(CUBE_POS_FRONT[i + 2] + zPos);
+                        if (isVisibleFront) {
+                            for (int i = 0; i < CUBE_POS_FRONT.length; i += 3) {
+                                vertices.add(CUBE_POS_FRONT[i] + xPos);
+                                vertices.add(CUBE_POS_FRONT[i + 1] + yPos);
+                                vertices.add(CUBE_POS_FRONT[i + 2] + zPos);
 
-                            vertices.add(sideTextureCoords[texCoordIndex]);
-                            vertices.add(sideTextureCoords[texCoordIndex + 1]);
+                                vertices.add(sideTextureCoords[texCoordIndex]);
+                                vertices.add(sideTextureCoords[texCoordIndex + 1]);
 
-                            texCoordIndex = (texCoordIndex + 2) % sideTextureCoords.length;
+                                texCoordIndex = (texCoordIndex + 2) % sideTextureCoords.length;
+                            }
+
+                            for (int index : CUBE_INDICES) {
+                                indices.add(index + vertexOffset);
+                            }
+
+                            vertexOffset += CUBE_POS_FRONT.length / 3;
                         }
-
-                        for (int index : CUBE_INDICES) {
-                            indices.add(index + vertexOffset);
-                        }
-
-                        vertexOffset += CUBE_POS_FRONT.length / 3;
 
                         texCoordIndex = 0;
 
                         // Generate vertices for the back face
-                        for (int i = 0; i < CUBE_POS_BACK.length; i += 3) {
-                            vertices.add(CUBE_POS_BACK[i] + xPos);
-                            vertices.add(CUBE_POS_BACK[i + 1] + yPos);
-                            vertices.add(CUBE_POS_BACK[i + 2] + zPos);
+                        if (isVisibleBack) {
+                            for (int i = 0; i < CUBE_POS_BACK.length; i += 3) {
+                                vertices.add(CUBE_POS_BACK[i] + xPos);
+                                vertices.add(CUBE_POS_BACK[i + 1] + yPos);
+                                vertices.add(CUBE_POS_BACK[i + 2] + zPos);
 
-                            vertices.add(sideTextureCoords[texCoordIndex]);
-                            vertices.add(sideTextureCoords[texCoordIndex + 1]);
+                                vertices.add(sideTextureCoords[texCoordIndex]);
+                                vertices.add(sideTextureCoords[texCoordIndex + 1]);
 
-                            texCoordIndex = (texCoordIndex + 2) % sideTextureCoords.length;
+                                texCoordIndex = (texCoordIndex + 2) % sideTextureCoords.length;
+                            }
+
+                            for (int index : CUBE_INDICES) {
+                                indices.add(index + vertexOffset);
+                            }
+
+                            vertexOffset += CUBE_POS_BACK.length / 3;
                         }
-
-                        for (int index : CUBE_INDICES) {
-                            indices.add(index + vertexOffset);
-                        }
-
-                        vertexOffset += CUBE_POS_BACK.length / 3;
 
                         texCoordIndex = 0;
 
                         // Generate vertices for the right face
-                        for (int i = 0; i < CUBE_POS_RIGHT.length; i += 3) {
-                            vertices.add(CUBE_POS_RIGHT[i] + xPos);
-                            vertices.add(CUBE_POS_RIGHT[i + 1] + yPos);
-                            vertices.add(CUBE_POS_RIGHT[i + 2] + zPos);
+                        if (isVisibleRight) {
+                            for (int i = 0; i < CUBE_POS_RIGHT.length; i += 3) {
+                                vertices.add(CUBE_POS_RIGHT[i] + xPos);
+                                vertices.add(CUBE_POS_RIGHT[i + 1] + yPos);
+                                vertices.add(CUBE_POS_RIGHT[i + 2] + zPos);
 
-                            vertices.add(sideTextureCoords[texCoordIndex]);
-                            vertices.add(sideTextureCoords[texCoordIndex + 1]);
+                                vertices.add(sideTextureCoords[texCoordIndex]);
+                                vertices.add(sideTextureCoords[texCoordIndex + 1]);
 
-                            texCoordIndex = (texCoordIndex + 2) % sideTextureCoords.length;
+                                texCoordIndex = (texCoordIndex + 2) % sideTextureCoords.length;
+                            }
+
+                            for (int index : CUBE_INDICES) {
+                                indices.add(index + vertexOffset);
+                            }
+
+                            vertexOffset += CUBE_POS_RIGHT.length / 3;
                         }
-
-                        for (int index : CUBE_INDICES) {
-                            indices.add(index + vertexOffset);
-                        }
-
-                        vertexOffset += CUBE_POS_RIGHT.length / 3;
 
                         texCoordIndex = 0;
 
                         // Generate vertices for the left face
-                        for (int i = 0; i < CUBE_POS_LEFT.length; i += 3) {
-                            vertices.add(CUBE_POS_LEFT[i] + xPos);
-                            vertices.add(CUBE_POS_LEFT[i + 1] + yPos);
-                            vertices.add(CUBE_POS_LEFT[i + 2] + zPos);
+                        if (isVisibleLeft) {
+                            for (int i = 0; i < CUBE_POS_LEFT.length; i += 3) {
+                                vertices.add(CUBE_POS_LEFT[i] + xPos);
+                                vertices.add(CUBE_POS_LEFT[i + 1] + yPos);
+                                vertices.add(CUBE_POS_LEFT[i + 2] + zPos);
 
-                            vertices.add(sideTextureCoords[texCoordIndex]);
-                            vertices.add(sideTextureCoords[texCoordIndex + 1]);
+                                vertices.add(sideTextureCoords[texCoordIndex]);
+                                vertices.add(sideTextureCoords[texCoordIndex + 1]);
 
-                            texCoordIndex = (texCoordIndex + 2) % sideTextureCoords.length;
+                                texCoordIndex = (texCoordIndex + 2) % sideTextureCoords.length;
+                            }
+
+                            for (int index : CUBE_INDICES) {
+                                indices.add(index + vertexOffset);
+                            }
+
+                            vertexOffset += CUBE_POS_LEFT.length / 3;
                         }
-
-                        for (int index : CUBE_INDICES) {
-                            indices.add(index + vertexOffset);
-                        }
-
-                        vertexOffset += CUBE_POS_LEFT.length / 3;
 
                         texCoordIndex = 0;
 
                         // Generate vertices for the top face
-                        for (int i = 0; i < CUBE_POS_TOP.length; i += 3) {
-                            vertices.add(CUBE_POS_TOP[i] + xPos);
-                            vertices.add(CUBE_POS_TOP[i + 1] + yPos);
-                            vertices.add(CUBE_POS_TOP[i + 2] + zPos);
+                        if (isVisibleTop) {
+                            for (int i = 0; i < CUBE_POS_TOP.length; i += 3) {
+                                vertices.add(CUBE_POS_TOP[i] + xPos);
+                                vertices.add(CUBE_POS_TOP[i + 1] + yPos);
+                                vertices.add(CUBE_POS_TOP[i + 2] + zPos);
 
-                            vertices.add(topTextureCoords[texCoordIndex]);
-                            vertices.add(topTextureCoords[texCoordIndex + 1]);
+                                vertices.add(topTextureCoords[texCoordIndex]);
+                                vertices.add(topTextureCoords[texCoordIndex + 1]);
 
-                            texCoordIndex = (texCoordIndex + 2) % topTextureCoords.length;
+                                texCoordIndex = (texCoordIndex + 2) % topTextureCoords.length;
+                            }
+
+                            for (int index : CUBE_INDICES) {
+                                indices.add(index + vertexOffset);
+                            }
+
+                            vertexOffset += CUBE_POS_TOP.length / 3;
                         }
-
-                        for (int index : CUBE_INDICES) {
-                            indices.add(index + vertexOffset);
-                        }
-
-                        vertexOffset += CUBE_POS_TOP.length / 3;
 
                         texCoordIndex = 0;
 
                         // Generate vertices for the bottom face
-                        for (int i = 0; i < CUBE_POS_BOTTOM.length; i += 3) {
-                            vertices.add(CUBE_POS_BOTTOM[i] + xPos);
-                            vertices.add(CUBE_POS_BOTTOM[i + 1] + yPos);
-                            vertices.add(CUBE_POS_BOTTOM[i + 2] + zPos);
+                        if (isVisibleBottom) {
+                            for (int i = 0; i < CUBE_POS_BOTTOM.length; i += 3) {
+                                vertices.add(CUBE_POS_BOTTOM[i] + xPos);
+                                vertices.add(CUBE_POS_BOTTOM[i + 1] + yPos);
+                                vertices.add(CUBE_POS_BOTTOM[i + 2] + zPos);
 
-                            vertices.add(bottomTextureCoords[texCoordIndex]);
-                            vertices.add(bottomTextureCoords[texCoordIndex + 1]);
+                                vertices.add(bottomTextureCoords[texCoordIndex]);
+                                vertices.add(bottomTextureCoords[texCoordIndex + 1]);
 
-                            texCoordIndex = (texCoordIndex + 2) % bottomTextureCoords.length;
+                                texCoordIndex = (texCoordIndex + 2) % bottomTextureCoords.length;
+                            }
+
+                            for (int index : CUBE_INDICES) {
+                                indices.add(index + vertexOffset);
+                            }
+
+                            vertexOffset += CUBE_POS_BOTTOM.length / 3;
                         }
-
-                        for (int index : CUBE_INDICES) {
-                            indices.add(index + vertexOffset);
-                        }
-
-                        vertexOffset += CUBE_POS_BOTTOM.length / 3;
                     }
                 }
             }
@@ -314,6 +333,18 @@ public class ChunkRenderer {
 
         glBindVertexArray(0);
         shaderProgram.detach();
+    }
+
+    private boolean shouldRenderFace(Chunk chunk, int neighborX, int neighborY, int neighborZ) {
+        // If the neighbor is outside the chunk, consider it as air and render the face
+        if (neighborX < 0 || neighborX >= chunk.getSizeX() ||
+                neighborY < 0 || neighborY >= chunk.getSizeY() ||
+                neighborZ < 0 || neighborZ >= chunk.getSizeZ()) {
+            return true;
+        }
+
+        Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
+        return neighborBlock.getType() == BlockType.AIR;
     }
 
     public void cleanup() {
