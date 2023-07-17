@@ -6,14 +6,12 @@ import voxelgame.core.KeyListener;
 import voxelgame.core.MouseListener;
 import voxelgame.core.Window;
 import voxelgame.core.Scene;
-import voxelgame.world.Chunk;
-import voxelgame.world.ChunkRenderer;
+import voxelgame.world.*;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class GameScene extends Scene {
-    private ChunkRenderer chunkRenderer;
-    private Chunk chunk;
+    private World world;
 
     public GameScene() {
 
@@ -23,8 +21,7 @@ public class GameScene extends Scene {
     public void init() {
         this.camera = new Camera(Window.get().getWidth(), Window.get().getHeight());
 
-        chunkRenderer = new ChunkRenderer();
-        chunk = new Chunk(16, 3, 16);
+        world = new World(16, 3, 16);
     }
 
     @Override
@@ -54,6 +51,6 @@ public class GameScene extends Scene {
                     (float) Math.toRadians(-displayVec.y * 0.1f));
         }
 
-        chunkRenderer.renderChunk(chunk);
+        world.update(deltaTime);
     }
 }

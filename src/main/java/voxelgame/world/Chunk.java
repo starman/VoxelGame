@@ -5,8 +5,12 @@ public class Chunk {
     private int sizeX;
     private int sizeY;
     private int sizeZ;
+    private int positionX;
+    private int positionZ;
 
-    public Chunk(int sizeX, int sizeY, int sizeZ) {
+    public Chunk(int positionX, int positionZ, int sizeX, int sizeY, int sizeZ) {
+        this.positionX = positionX;
+        this.positionZ = positionZ;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.sizeZ = sizeZ;
@@ -27,6 +31,18 @@ public class Chunk {
 
     public Block getBlock(int x, int y, int z) {
         return blocks[x][y][z];
+    }
+
+    public void setBlock(int x, int y, int z, Block block) {
+        blocks[x][y][z] = block;
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public int getPositionZ() {
+        return positionZ;
     }
 
     public int getSizeX() {

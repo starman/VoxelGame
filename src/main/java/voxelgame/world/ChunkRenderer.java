@@ -142,9 +142,9 @@ public class ChunkRenderer {
                         boolean isVisibleTop = shouldRenderFace(chunk, x, y + 1, z);
                         boolean isVisibleBottom = shouldRenderFace(chunk, x, y - 1, z);
 
-                        float xPos = (float) x;
+                        float xPos = (float) x + chunk.getPositionX() * chunk.getSizeX();
                         float yPos = (float) y;
-                        float zPos = (float) z;
+                        float zPos = (float) z + chunk.getPositionZ() * chunk.getSizeZ();
 
                         float[] sideTextureCoords = textureAtlas.getTextureCoordinates(block.getType().getSideTextureIndex());
                         float[] topTextureCoords = textureAtlas.getTextureCoordinates(block.getType().getTopTextureIndex());
@@ -313,9 +313,7 @@ public class ChunkRenderer {
         return buffer;
     }
 
-    public void renderChunk(Chunk chunk) {
-        generateMesh(chunk);
-
+    public void renderChunks(List<Chunk> chunks) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shaderProgram.use();
@@ -329,7 +327,10 @@ public class ChunkRenderer {
 
         glBindVertexArray(vaoID);
 
-        glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+        for (Chunk chunk : chunks) {
+            generateMesh(chunk);
+            glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+        }
 
         glBindVertexArray(0);
         shaderProgram.detach();
