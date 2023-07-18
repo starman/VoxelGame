@@ -1,11 +1,15 @@
 package voxelgame.world;
 
+import voxelgame.core.Window;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class World {
+    private static final int RENDER_DISTANCE = 2;
+
     private int chunkSizeX;
     private int chunkSizeY;
     private int chunkSizeZ;
@@ -25,8 +29,8 @@ public class World {
     }
 
     public void update(float deltaTime) {
-        loadChunk(0, 0);
-        loadChunk(1, 0);
+        loadChunksInPlayerRange();
+        unloadChunksOutsideOfPlayerRange();
 
         List<Chunk> chunksToLoad = new ArrayList<>();
         for (Chunk chunk : loadedChunks.values()) {
@@ -62,6 +66,41 @@ public class World {
             saveChunk(chunk);
             loadedChunks.remove(chunkKey);
             unloadedChunks.put(chunkKey, chunk);
+        }
+    }
+
+    public void loadChunksInPlayerRange() {
+        int playerChunkX = (int) Window.getCurrentScene().getCamera().getPosition().x / chunkSizeX;
+        int playerChunkZ = (int) Window.getCurrentScene().getCamera().getPosition().z / chunkSizeZ;
+
+        for (int x = playerChunkX - RENDER_DISTANCE; x <= playerChunkX + RENDER_DISTANCE; x++) {
+            for (int z = playerChunkZ - RENDER_DISTANCE; z <= playerChunkZ + RENDER_DISTANCE; z++) {
+                if (!loadedChunks.containsKey(getChunkKey(x, z))) {
+                    loadChunk(x, z);
+                }
+            }
+        }
+    }
+
+    public void unloadChunksOutsideOfPlayerRange() {
+        int playerChunkX = (int) Window.getCurrentScene().getCamera().getPosition().x / chunkSizeX;
+        int playerChunkZ = (int) Window.getCurrentScene().getCamera().getPosition().z / chunkSizeZ;
+
+        List<Chunk> chunksOutsideRenderDistance = new ArrayList<>();
+
+        for (Chunk chunk : loadedChunks.values()) {
+            int chunkX = chunk.getPositionX();
+            int chunkZ = chunk.getPositionZ();
+
+            if (Math.abs(chunkX - playerChunkX) > RENDER_DISTANCE || Math.abs(chunkZ - playerChunkZ) > RENDER_DISTANCE) {
+                chunksOutsideRenderDistance.add(chunk);
+            }
+        }
+
+        for (Chunk chunk : chunksOutsideRenderDistance) {
+            int chunkX = chunk.getPositionX();
+            int chunkZ = chunk.getPositionZ();
+            unloadChunk(chunkX, chunkZ);
         }
     }
 
