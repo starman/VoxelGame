@@ -134,7 +134,7 @@ public class ChunkRenderer {
             for (int y = 0; y < chunk.getSizeY(); y++) {
                 for (int z = 0; z < chunk.getSizeZ(); z++) {
                     Block block = chunk.getBlock(x, y, z);
-                    if (block.getType() != BlockType.AIR) {
+                    if (block != null && block.getType() != BlockType.AIR) {
                         boolean isVisibleFront = shouldRenderFace(chunk, x, y, z + 1);
                         boolean isVisibleBack = shouldRenderFace(chunk, x, y, z - 1);
                         boolean isVisibleRight = shouldRenderFace(chunk, x + 1, y, z);
@@ -345,7 +345,7 @@ public class ChunkRenderer {
         }
 
         Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
-        return neighborBlock.getType() == BlockType.AIR;
+        return neighborBlock == null || neighborBlock.getType() == BlockType.AIR;
     }
 
     public void cleanup() {

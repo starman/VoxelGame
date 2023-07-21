@@ -1,6 +1,7 @@
 package voxelgame.world;
 
 import voxelgame.core.Window;
+import voxelgame.world.noise.FastNoiseLite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ public class World {
     private Map<Long, Chunk> loadedChunks;
     private Map<Long, Chunk> unloadedChunks;
 
+    private FastNoiseLite noiseGenerator;
+
     public World(int chunkSizeX, int chunkSizeY, int chunkSizeZ) {
         this.chunkSizeX = chunkSizeX;
         this.chunkSizeY = chunkSizeY;
@@ -26,6 +29,12 @@ public class World {
         this.loadedChunks = new HashMap<>();
         this.unloadedChunks = new HashMap<>();
         this.chunkRenderer = new ChunkRenderer();
+
+        noiseGenerator = new FastNoiseLite();
+        noiseGenerator.SetNoiseType(FastNoiseLite.NoiseType.Perlin);
+
+        noiseGenerator.SetFrequency(0.1f);
+        noiseGenerator.SetSeed(12345);
     }
 
     public void update(float deltaTime) {
@@ -150,8 +159,36 @@ public class World {
     private Chunk generateChunk(int chunkX, int chunkZ) {
         Chunk chunk = new Chunk(chunkX, chunkZ, chunkSizeX, chunkSizeY, chunkSizeZ);
 
-        // TODO: Implement world gen
+        for (int x = 0; x < chunkSizeX; x++) {
+            for (int z = 0; z < chunkSizeZ; z++) {
+                int worldX = chunkX * chunkSizeX + x;
+                int worldZ = chunkZ * chunkSizeZ + z;
+
+                int height = calculateTerrainHeight(worldX, worldZ);
+
+                // Place blocks according to the terrain height
+                for (int y = 0; y < chunkSizeY; y++) {
+                    if (y < height - 16) {
+                        chunk.setBlock(x, y, z, new Block(BlockType.STONE));
+                    } else if (y < height - 1) {
+                        chunk.setBlock(x, y, z, new Block(BlockType.DIRT));
+                    } else if (y == height - 1) {
+                        chunk.setBlock(x, y, z, new Block(BlockType.GRASS));
+                    } else {
+                        chunk.setBlock(x, y, z, new Block(BlockType.AIR));
+                    }
+                }
+            }
+        }
 
         return chunk;
+    }
+
+    private int calculateTerrainHeight(int x, int z) {
+        float noiseValue = noiseGenerator.GetNoise(x * 0.1f, z * 0.1f);
+        int minHeight = 32;
+        int maxHeight = 48;
+        int heightRange = maxHeight - minHeight;
+        return minHeight + (int) (noiseValue * heightRange);
     }
 }

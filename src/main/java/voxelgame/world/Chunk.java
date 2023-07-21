@@ -15,14 +15,14 @@ public class Chunk {
         this.sizeY = sizeY;
         this.sizeZ = sizeZ;
         blocks = new Block[sizeX][sizeY][sizeZ];
-        generateBlocks();
+        // generateBlocks();
     }
 
     private void generateBlocks() {
         for (int x = 0; x < blocks.length; x++) {
             for (int y = 0; y < blocks[x].length; y++) {
                 for (int z = 0; z < blocks[x][y].length; z++) {
-                    BlockType type = BlockType.GRASS; // world gen
+                    BlockType type = BlockType.AIR;
                     blocks[x][y][z] = new Block(type);
                 }
             }
@@ -34,7 +34,9 @@ public class Chunk {
     }
 
     public void setBlock(int x, int y, int z, Block block) {
-        blocks[x][y][z] = block;
+        if (x >= 0 && x < sizeX && y >= 0 && y < sizeY && z >= 0 && z < sizeZ) {
+            blocks[x][y][z] = block;
+        }
     }
 
     public int getPositionX() {

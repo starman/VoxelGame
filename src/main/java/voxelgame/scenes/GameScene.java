@@ -21,7 +21,7 @@ public class GameScene extends Scene {
     public void init() {
         this.camera = new Camera(Window.get().getWidth(), Window.get().getHeight());
 
-        world = new World(16, 3, 16);
+        world = new World(16, 64, 16);
     }
 
     @Override
