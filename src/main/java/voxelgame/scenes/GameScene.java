@@ -11,6 +11,8 @@ import voxelgame.world.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class GameScene extends Scene {
+    private static final float MOUSE_SENSITIVITY = 0.1f;
+
     private World world;
 
     public GameScene() {
@@ -26,6 +28,13 @@ public class GameScene extends Scene {
 
     @Override
     public void update(float deltaTime) {
+        MouseListener.input();
+
+        // Mouse/camera movement
+        Vector2f displVec = MouseListener.getDisplVec();
+        camera.addRotation((float) Math.toRadians(-displVec.x * MOUSE_SENSITIVITY),
+                (float) Math.toRadians(-displVec.y * MOUSE_SENSITIVITY));
+
         if (KeyListener.isKeyPressed(GLFW_KEY_W)) {
             camera.moveForward(deltaTime * 2.0f);
         }
@@ -43,12 +52,6 @@ public class GameScene extends Scene {
         }
         if (KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
             camera.moveDown(deltaTime * 2.0f);
-        }
-
-        if (MouseListener.isDragging()) {
-            Vector2f displayVec = MouseListener.getDisplayVec();
-            camera.addRotation((float) Math.toRadians(-displayVec.x * 0.1f),
-                    (float) Math.toRadians(-displayVec.y * 0.1f));
         }
 
         world.update(deltaTime);

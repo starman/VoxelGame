@@ -86,9 +86,11 @@ public class Window {
         }
 
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
+        glfwSetCursorEnterCallback(glfwWindow, MouseListener::mouseEnterCallback);
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
-        glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
+
+        glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         glfwMakeContextCurrent(glfwWindow);
         glfwSwapInterval(1); // enable v-sync
