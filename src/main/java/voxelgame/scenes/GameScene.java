@@ -12,6 +12,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class GameScene extends Scene {
     private static final float MOUSE_SENSITIVITY = 0.1f;
+    private static final float MOVEMENT_SPEED = 3.0f;
 
     private World world;
 
@@ -36,22 +37,22 @@ public class GameScene extends Scene {
                 (float) Math.toRadians(-displVec.y * MOUSE_SENSITIVITY));
 
         if (KeyListener.isKeyPressed(GLFW_KEY_W)) {
-            camera.moveForward(deltaTime * 2.0f);
+            camera.moveForward(deltaTime * MOVEMENT_SPEED);
         }
         if (KeyListener.isKeyPressed(GLFW_KEY_S)) {
-            camera.moveBackwards(deltaTime * 2.0f);
+            camera.moveBackwards(deltaTime * MOVEMENT_SPEED);
         }
         if (KeyListener.isKeyPressed(GLFW_KEY_A)) {
-            camera.moveLeft(deltaTime * 2.0f);
+            camera.moveLeft(deltaTime * MOVEMENT_SPEED);
         }
         if (KeyListener.isKeyPressed(GLFW_KEY_D)) {
-            camera.moveRight(deltaTime * 2.0f);
+            camera.moveRight(deltaTime * MOVEMENT_SPEED);
         }
         if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
-            camera.moveUp(deltaTime * 2.0f);
+            camera.moveUp(deltaTime * MOVEMENT_SPEED);
         }
         if (KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
-            camera.moveDown(deltaTime * 2.0f);
+            camera.moveDown(deltaTime * MOVEMENT_SPEED);
         }
 
         world.update(deltaTime);
