@@ -8,6 +8,8 @@ public class Camera {
     private static final float FOV = (float) Math.toRadians(60.0f);
     private static final float Z_FAR = 1000.f;
     private static final float Z_NEAR = 0.01f;
+    private static final float MIN_PITCH = (float) Math.toRadians(-90.0f);
+    private static final float MAX_PITCH = (float) Math.toRadians(90.0f);
 
     private Matrix4f projMatrix;
     private Matrix4f viewMatrix;
@@ -32,6 +34,7 @@ public class Camera {
 
     public void addRotation(float x, float y) {
         rotation.add(x, y);
+        rotation.x = Math.max(Math.min(rotation.x, MAX_PITCH), MIN_PITCH);
         recalculate();
     }
 
