@@ -142,4 +142,8 @@ public class Window {
     public int getHeight() {
         return height;
     }
+
+    public long getWindowGLFW() {
+        return glfwWindow;
+    }
 }

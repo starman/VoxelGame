@@ -5,6 +5,9 @@ import org.joml.Vector2f;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseListener {
+    private static final double CENTER_X = Window.get().getWidth() / 2.0;
+    private static final double CENTER_Y = Window.get().getHeight() / 2.0;
+
     private static MouseListener instance;
     private Vector2f currentPos;
     private Vector2f displVec;
@@ -55,18 +58,22 @@ public class MouseListener {
     public static void input() {
         get().displVec.x = 0;
         get().displVec.y = 0;
+
         if (get().previousPos.x > 0 && get().previousPos.y > 0 && get().inWindow) {
-            double deltax = get().currentPos.x - get().previousPos.x;
-            double deltay = get().currentPos.y - get().previousPos.y;
-            boolean rotateX = deltax != 0;
-            boolean rotateY = deltay != 0;
-            if (rotateX) {
-                get().displVec.y = (float) -deltax;
-            }
-            if (rotateY) {
-                get().displVec.x = (float) -deltay;
+            double deltaX = get().currentPos.x - get().previousPos.x;
+            double deltaY = get().currentPos.y - get().previousPos.y;
+
+            if (deltaX != 0 || deltaY != 0) {
+                double accumulatedX = get().currentPos.x - CENTER_X;
+                double accumulatedY = get().currentPos.y - CENTER_Y;
+
+                get().displVec.y = (float) -accumulatedX;
+                get().displVec.x = (float) -accumulatedY;
+
+                glfwSetCursorPos(Window.get().getWindowGLFW(), CENTER_X, CENTER_Y);
             }
         }
+
         get().previousPos.x = get().currentPos.x;
         get().previousPos.y = get().currentPos.y;
     }
