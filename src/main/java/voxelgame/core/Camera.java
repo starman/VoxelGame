@@ -46,21 +46,15 @@ public class Camera {
         return viewMatrix;
     }
 
-    public void moveBackwards(float inc) {
-        viewMatrix.positiveZ(direction).negate().mul(inc);
-        position.sub(direction);
-        recalculate();
-    }
-
-    public void moveDown(float inc) {
-        viewMatrix.positiveY(up).mul(inc);
-        position.sub(up);
-        recalculate();
-    }
-
     public void moveForward(float inc) {
         viewMatrix.positiveZ(direction).negate().mul(inc);
         position.add(direction);
+        recalculate();
+    }
+
+    public void moveBackwards(float inc) {
+        viewMatrix.positiveZ(direction).negate().mul(inc);
+        position.sub(direction);
         recalculate();
     }
 
@@ -77,8 +71,12 @@ public class Camera {
     }
 
     public void moveUp(float inc) {
-        viewMatrix.positiveY(up).mul(inc);
-        position.add(up);
+        position.y += inc;
+        recalculate();
+    }
+
+    public void moveDown(float inc) {
+        position.y -= inc;
         recalculate();
     }
 
