@@ -184,7 +184,7 @@ public class World {
         return chunk;
     }
 
-    private int calculateTerrainHeight(int x, int z) {
+    public int calculateTerrainHeight(int x, int z) {
         float noiseValue = noiseGenerator.GetNoise(x * 0.1f, z * 0.1f);
         int minHeight = 32;
         int maxHeight = 48;

@@ -22,9 +22,16 @@ public class GameScene extends Scene {
 
     @Override
     public void init() {
-        this.camera = new Camera(Window.get().getWidth(), Window.get().getHeight());
-
         world = new World(16, 64, 16);
+
+        // Calculate spawn point
+        int spawnX = 0;
+        int spawnZ = 0;
+        int terrainHeight = world.calculateTerrainHeight(spawnX, spawnZ);
+        float spawnY = terrainHeight + 1.5f;
+
+        this.camera = new Camera(Window.get().getWidth(), Window.get().getHeight());
+        this.camera.setPosition(spawnX, spawnY, spawnZ);
     }
 
     @Override
